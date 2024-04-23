@@ -170,15 +170,11 @@ def simple_preview(
 
     recorders = []
     write_dtype = {}
-
     if record:
         # from parameters construct single names...
         use_queues = get_queues(list(ids.keys()))
         metadata_path = os.path.join(basedir, "metadata.toml")
         show_fields = toml.load(metadata_path)["show_fields"]
-        info = list(show_fields.values())
-        info = [str(x) for x in info]
-        info = '_'.join(info)
         init_timestamp = datetime.datetime.now()
 
         recording_metadata = {
@@ -196,7 +192,6 @@ def simple_preview(
 
         init_timestamp_str = init_timestamp.strftime("%Y%m%d%H%M%S-%f")
         dpg.create_context()
-        save_path = Path(save_base_dir).joinpath(f"{info}_{init_timestamp_str}")
         # save_path = os.path.abspath(f"{info}_{init_timestamp_str}")
         # https://github.com/hoffstadt/DearPyGui/issues/1380
         with dpg.font_registry():
@@ -234,6 +229,11 @@ def simple_preview(
 
         recording_metadata["user_input"] = settings_vals
 
+        info = list(settings_vals.values())
+        info = [str(x) for x in info]
+        info = '_'.join(info)
+        save_path = Path(save_base_dir).joinpath(f"{info}_{init_timestamp_str}")
+
         if os.path.exists(save_path):
             raise RuntimeError(f"Directory {save_path} already exists")
         else:
@@ -246,6 +246,7 @@ def simple_preview(
         for _id, _cam in cameras.items():
             cameras[_id].save_queue = use_queues["storage"][_id]
             timestamp_fields = ["frame_id", "device_timestamp", "system_timestamp"]
+
             if save_engine == "ffmpeg":
                 _recorder = FfmpegVideoRecorder(
                     width=cameras[_id]._width,
@@ -388,6 +389,22 @@ def simple_preview(
     start_time = -np.inf
     prior_fps = np.nan
     cur_duration = 0
+
+
+    if record:
+        import _thread
+        user_input_ts_filename = os.path.join(save_path, f"use_input_ts.txt")
+        user_input_ts_file = open(user_input_ts_filename, 'w')
+        def get_timestamp(file):
+            while True:
+                a = input('Enter to log timestamp')
+                # get current timestamp
+                ts = time.time_ns()
+                file.write(f"{ts} \n")
+                file.flush() 
+
+        _thread.start_new_thread(get_timestamp, (user_input_ts_file,))
+
     try:
         while dpg.is_dearpygui_running():
             dat = {}

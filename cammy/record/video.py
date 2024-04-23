@@ -90,8 +90,11 @@ class FfmpegVideoRecorder(BaseRecord):
 		
 
 	def close_writer(self):
-		self._pipe.stdin.close()
-		self._tstamp_file.close()
+		try:
+			self._pipe.stdin.close()
+			self._tstamp_file.close()
+		except:
+			pass
 
 
 class RawVideoRecorder(BaseRecord):
