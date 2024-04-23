@@ -1,0 +1,59 @@
+# ----------------------------------- #
+[genicam.FLIR.a]
+## Acquisition params
+
+## Encoding params
+PixelFormat = "Mono8"
+
+# ----------------------------------- #
+
+[genicam.Lucid.a]
+# Acquisition params
+AcquisitionMode = "Continuous"
+# AcquisitionFrameRate = 30
+
+ExposureTime = 100
+TriggerMode = "On"
+TriggerSource = "Line0"
+TriggerSelector = "FrameStart"
+TriggerActivation = "RisingEdge"
+TriggerDelay = 4000
+
+# Encoding params
+PixelFormat = "Coord3D_C16"
+Scan3dOperatingMode = "HighSpeedDistance1250mmSingleFreq"
+# Scan3dOperatingMode = "HighSpeedDistance625mmSingleFreq"
+
+Scan3dConfidenceThresholdEnable = 0
+Scan3dModeSelector = "Processed"
+Scan3dDistanceMin = 0
+
+
+
+
+[display.Lucid.slider_defaults_min]
+default_value = 2150
+min_value = 0
+max_value = 10000
+[display.Lucid.slider_defaults_max]
+default_value = 3300
+min_value = 0
+max_value = 10000
+
+
+[display.FLIR.slider_defaults_min]
+default_value = 0
+min_value = 0
+max_value = 255
+[display.FLIR.slider_defaults_max]
+default_value = 185
+min_value = 0
+max_value = 255
+
+[charuco]
+squares = [6, 6]
+marker_length_mm = 0.01
+square_length_mm = 0.015
+num_slices = 1
+markers_per_slice = 18
+aruco_dictionary = 3

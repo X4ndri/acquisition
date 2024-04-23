@@ -1,0 +1,10 @@
+[show_fields]
+group = "test"
+mouse_id = "shafiq"
+injection = ""
+dosage = ""
+protocol = 'v2'
+on_time = 300
+off_time = 300
+repeats = 12
+
