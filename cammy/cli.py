@@ -230,9 +230,16 @@ def simple_preview(
         recording_metadata["user_input"] = settings_vals
 
         info = list(settings_vals.values())
+        group_name = info[0]
+        mouse_name = info[1]
+        injection = info[2]
+        dose = info[3]
+
         info = [str(x) for x in info]
         info = '_'.join(info)
-        save_path = Path(save_base_dir).joinpath(f"{info}_{init_timestamp_str}")
+        save_path = Path(save_base_dir).joinpath(f"{group_name}/{mouse_name}/{injection}/{dose}")
+        os.makedirs(save_path.as_posix(), exist_ok=True)
+        save_path = save_path.joinpath(f"{info}_{init_timestamp_str}")
 
         if os.path.exists(save_path):
             raise RuntimeError(f"Directory {save_path} already exists")
